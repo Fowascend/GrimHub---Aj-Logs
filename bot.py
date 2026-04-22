@@ -5,7 +5,6 @@ import os
 import requests
 from datetime import datetime
 
-# Bot setup
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
@@ -13,17 +12,17 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 WEBHOOK_URL = "https://discord.com/api/webhooks/1487798305189662840/OAaDjhmK4YlCJNR_9KbV8dJ5KFEakLk0sE5wMTPW3MrOZ04FTdmCJytEc3qAOyZSvHz8"
 
 BRAINROTS = {
-    "Strawberry Elephant": {"base": 750, "interval": 7200, "last": 0, "color": 0xFF69B4},
-    "Meowl": {"base": 650, "interval": 5400, "last": 0, "color": 0xFFA500},
-    "Skibidi Toilet": {"base": 450, "interval": 2700, "last": 0, "color": 0x808080},
-    "Headless Horseman": {"base": 550, "interval": 14400, "last": 0, "color": 0x800080},
-    "Dragon Cannelloni": {"base": 250, "interval": 900, "last": 0, "color": 0xFF0000}
+    "Strawberry Elephant": {"base": 750, "interval": 7200, "last": 0},
+    "Meowl": {"base": 650, "interval": 5400, "last": 0},
+    "Skibidi Toilet": {"base": 450, "interval": 2700, "last": 0},
+    "Headless Horseman": {"base": 550, "interval": 14400, "last": 0},
+    "Dragon Cannelloni": {"base": 250, "interval": 900, "last": 0}
 }
 
 EXTRA_BRAINROTS = [
-    {"name": "Frograma & Chocrama", "base": 100, "maxCap": 3000},
-    {"name": "Capitano Moby", "base": 165, "maxCap": 3000},
-    {"name": "Hydra Bunny", "base": 185, "maxCap": 3000}
+    {"name": "Frograma & Chocrama", "base": 100},
+    {"name": "Capitano Moby", "base": 165},
+    {"name": "Hydra Bunny", "base": 185}
 ]
 
 MUTATIONS = {
@@ -156,9 +155,6 @@ async def next(ctx):
             msg += f"• {name}: **NOW!**\n"
     await ctx.send(msg)
 
-# ============================================
-# READ TOKEN FROM ENVIRONMENT VARIABLE
-# ============================================
 TOKEN = os.environ.get("DISCORD_TOKEN")
 
 if TOKEN is None:
