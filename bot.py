@@ -2,10 +2,12 @@ import discord
 from discord.ext import commands, tasks
 import random
 import os
+import requests
 from datetime import datetime
 
 # Bot setup
 intents = discord.Intents.default()
+intents.message_content = True  # Enable message content intent
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 # Your Discord webhook URL
@@ -110,84 +112,4 @@ async def send_webhook_embed(name, price, mutation, trait, players, maxpl, job_i
     
     embed = discord.Embed(
         title="🎯 NEW BRAINROT DETECTED",
-        description=f"**{name}** has been detected!",
-        color=color,
-        timestamp=datetime.now()
-    )
-    
-    embed.add_field(name="💰 Estimated Value", value=price_formatted, inline=True)
-    embed.add_field(name="🧬 Mutation", value=mutation, inline=True)
-    if trait:
-        embed.add_field(name="✨ Trait", value=trait, inline=True)
-    embed.add_field(name="👥 Players", value=f"{players}/{maxpl}", inline=True)
-    if job_id:
-        embed.add_field(name="🔗 Job ID", value=f"`{job_id[:12]}...`", inline=False)
-    
-    embed.set_footer(text="GrimHub AJ • 24/7 Detection")
-    
-    webhook = discord.SyncWebhook.from_url(WEBHOOK_URL)
-    webhook.send(embed=embed)
-
-@tasks.loop(seconds=30)
-async def check_schedules():
-    now = datetime.now().timestamp()
-    
-    for name, data in BRAINROTS.items():
-        if now - data["last"] >= data["interval"]:
-            mutation = get_random_mutation()
-            trait = get_random_trait()
-            price = calculate_price(data["base"], mutation, trait)
-            players = random.randint(1, 8)
-            job_id = f"grimhub_{int(now)}_{random.randint(1000,9999)}"
-            
-            await send_webhook_embed(name, price, mutation, trait, players, 8, job_id)
-            BRAINROTS[name]["last"] = now
-            print(f"Sent: {name} at {datetime.now()}")
-    
-    if random.random() < 0.3:
-        extra = random.choice(EXTRA_BRAINROTS)
-        mutation = get_random_mutation()
-        trait = get_random_trait()
-        price = calculate_price(extra["base"], mutation, trait)
-        players = random.randint(1, 8)
-        job_id = f"extra_{int(now)}_{random.randint(1000,9999)}"
-        
-        await send_webhook_embed(extra["name"], price, mutation, trait, players, 8, job_id)
-        print(f"Sent extra: {extra['name']} at {datetime.now()}")
-
-@bot.event
-async def on_ready():
-    print(f"✅ GrimHub AJ Bot is online!")
-    print(f"Logged in as {bot.user}")
-    print(f"Started at {datetime.now()}")
-    check_schedules.start()
-
-@bot.command()
-async def status(ctx):
-    await ctx.send("✅ GrimHub AJ Bot is running 24/7!")
-
-@bot.command()
-async def test(ctx):
-    await send_webhook_embed("Test Brainrot", 500, "Rainbow", "Divine", 4, 8, "test_123")
-    await ctx.send("Test sent!")
-
-@bot.command()
-async def next(ctx):
-    now = datetime.now().timestamp()
-    msg = "**Next Scheduled Brainrots:**\n"
-    for name, data in BRAINROTS.items():
-        remaining = data["interval"] - (now - data["last"])
-        if remaining > 0:
-            minutes = int(remaining // 60)
-            seconds = int(remaining % 60)
-            msg += f"• {name}: {minutes}m {seconds}s\n"
-        else:
-            msg += f"• {name}: **NOW!**\n"
-    await ctx.send(msg)
-
-# ============================================
-# REPLACE THIS WITH YOUR ACTUAL TOKEN
-# ============================================
-TOKEN = "MTQ5NjQ2NDM4ODI4OTQ2NjQ2OQ.GmI63x.a7mliJZTHOMqMNpCffw0EZCP5MLKW50IUfBB2w"
-
-bot.run(TOKEN)
+        description=f"**{
