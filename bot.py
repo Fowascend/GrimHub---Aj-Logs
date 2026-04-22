@@ -185,4 +185,9 @@ async def next(ctx):
             msg += f"• {name}: **NOW!**\n"
     await ctx.send(msg)
 
-bot.run(os.environ.get("DISCORD_TOKEN"))
+# ============================================
+# REPLACE THIS WITH YOUR ACTUAL TOKEN
+# ============================================
+TOKEN = "MTQ5NjQ2NDM4ODI4OTQ2NjQ2OQ.GmI63x.a7mliJZTHOMqMNpCffw0EZCP5MLKW50IUfBB2w"
+
+bot.run(TOKEN)
